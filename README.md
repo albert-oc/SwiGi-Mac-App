@@ -9,7 +9,7 @@ This project is a Swift port of the original [`swigi.py`](swigi.py) script, pack
 | Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
 |---------|--------------------------|----------------------------|
 | **macOS 26+** | Yes | Yes |
-| macOS 13–25 | No (not built/tested for these targets) | Yes |
+| macOS 13–25 | See MacOS-13 branch on this same repo | Yes |
 | **macOS 12 (Monterey)** | **No** | Yes |
 
 On macOS 12, use the Python script instead:
