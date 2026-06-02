@@ -22,6 +22,7 @@ Or run:
 
 ```powershell
 .\scripts\fetch-hidapi-windows.ps1
+python3 .\scripts\generate-app-icon-windows.py
 ```
 
 ## Download (pre-built binary)

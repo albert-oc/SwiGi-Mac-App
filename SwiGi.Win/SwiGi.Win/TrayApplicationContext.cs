@@ -27,14 +27,25 @@ internal sealed class TrayApplicationContext : ApplicationContext
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(new ToolStripMenuItem("Quit", null, OnQuit));
 
+        var trayIcon = LoadTrayIcon();
         _trayIcon = new NotifyIcon
         {
-            Icon = SystemIcons.Application,
+            Icon = trayIcon,
             Text = "SwiGi",
             Visible = true,
             ContextMenuStrip = menu
         };
         _trayIcon.DoubleClick += (_, _) => OnStartStop(null, EventArgs.Empty);
+    }
+
+    private static Icon LoadTrayIcon()
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "app.ico");
+        if (File.Exists(path))
+        {
+            return new Icon(path);
+        }
+        return SystemIcons.Application;
     }
 
     private void OnStatusChanged(EngineStatus status)

@@ -13,8 +13,10 @@
     <Company>SwiGi</Company>
     <Product>SwiGi</Product>
     <Description>Synchronize Logitech Easy-Switch between keyboard and mouse</Description>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="app.ico" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\native\win-x64\hidapi.dll" Link="hidapi.dll" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\native\win-x64\hidapi.dll')" />
   </ItemGroup>
 </Project>
