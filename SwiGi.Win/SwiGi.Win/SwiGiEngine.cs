@@ -87,6 +87,8 @@ internal sealed class SwiGiEngine : IDisposable
 
         DeviceInfo? keyboard;
         DeviceInfo? mouse = null;
+
+        keyboard = DeviceDiscovery.FindDevice(HidPPConstants.DeviceTypeKeyboard);
         if (keyboard is null)
         {
             SetStatus(new EngineStatus { Kind = EngineStatusKind.Error, ErrorMessage = "Keyboard not found. Check Bluetooth connection." });

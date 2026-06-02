@@ -24,6 +24,14 @@ Or run:
 .\scripts\fetch-hidapi-windows.ps1
 ```
 
+## Download (pre-built binary)
+
+| File | Platform |
+|------|----------|
+| [`SwiGi-1.0.0-Windows11-x64.zip`](releases/SwiGi-1.0.0-Windows11-x64.zip) | **Windows 10/11 (x64)** |
+
+Unzip and run `SwiGi.exe`. Requires [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0).
+
 ## Build from source
 
 ```powershell
@@ -33,7 +41,17 @@ dotnet build SwiGi.Win.sln -c Release
 
 Output: `SwiGi.Win\SwiGi.Win\bin\Release\net8.0-windows10.0.17763.0\SwiGi.exe`
 
-Copy `hidapi.dll` into that folder before running.
+To rebuild the release zip locally:
+
+```bash
+./scripts/package-release-windows.sh
+```
+
+On Windows (PowerShell), after installing the .NET 8 SDK:
+
+```powershell
+.\scripts\package-release-windows.sh
+```
 
 ### Publish (self-contained, optional)
 
