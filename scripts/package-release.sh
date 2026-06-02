@@ -68,6 +68,11 @@ install_name_tool -change "/opt/homebrew/lib/libhidapi.0.dylib" "@executable_pat
 install_name_tool -change "/usr/local/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
 install_name_tool -id "@executable_path/../Frameworks/libhidapi.0.dylib" "$FRAMEWORKS/libhidapi.0.dylib"
 
+if [[ "${CODESIGN_IDENTITY:-}" != "skip" ]]; then
+  codesign --force --sign - "$FRAMEWORKS/libhidapi.0.dylib" 2>/dev/null || true
+  codesign --force --sign - -o runtime --entitlements "$ROOT/SwiGi/SwiGi/SwiGi.entitlements" "$APP" 2>/dev/null || true
+fi
+
 mkdir -p "$RELEASES_DIR"
 ZIP_PATH="$RELEASES_DIR/$ZIP_NAME"
 rm -f "$ZIP_PATH"

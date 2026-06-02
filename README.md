@@ -31,7 +31,7 @@ A ready-to-run **Intel** build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.0.0-macOS13-intel.zip`](releases/SwiGi-1.0.0-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
+| [`SwiGi-1.1.0-macOS13-intel.zip`](releases/SwiGi-1.1.0-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
 
 **Install:**
 
