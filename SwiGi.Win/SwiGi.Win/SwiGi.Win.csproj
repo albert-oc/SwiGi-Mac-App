@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>SwiGi</AssemblyName>
+    <RootNamespace>SwiGi.Win</RootNamespace>
+    <Version>1.0.0</Version>
+    <Company>SwiGi</Company>
+    <Product>SwiGi</Product>
+    <Description>Synchronize Logitech Easy-Switch between keyboard and mouse</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\..\native\win-x64\hidapi.dll" Link="hidapi.dll" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\native\win-x64\hidapi.dll')" />
+  </ItemGroup>
+</Project>

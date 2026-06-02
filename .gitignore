@@ -18,6 +18,12 @@ __pycache__/
 .venv/
 venv/
 
+# .NET / Windows
+bin/
+obj/
+*.user
+*.suo
+
 # IDE
 .idea/
 *.swp
