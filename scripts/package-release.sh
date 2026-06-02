@@ -8,11 +8,16 @@ CONFIG="Release"
 BUILD_DIR="$ROOT/build"
 APP="$BUILD_DIR/Release/SwiGi.app"
 RELEASES_DIR="$ROOT/releases"
-VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
-ARCH="$(uname -m)"
-ZIP_NAME="SwiGi-${VERSION}-macOS-${ARCH}.zip"
 
-echo "Building SwiGi ($CONFIG)..."
+VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
+MIN_OS=$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration "$CONFIG" -showBuildSettings 2>/dev/null | awk -F' = ' '$1 == "    MACOSX_DEPLOYMENT_TARGET" {print $2; exit}')
+MIN_OS="${MIN_OS:-26.0}"
+MIN_OS_LABEL="macOS${MIN_OS%%.*}"
+ARCH="$(uname -m)"
+ARCH_LABEL="$ARCH"
+ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH_LABEL}.zip"
+
+echo "Building SwiGi ($CONFIG, $ARCH)..."
 xcodebuild \
   -project "$PROJECT" \
   -scheme "$SCHEME" \
@@ -50,6 +55,11 @@ install_name_tool -change "/opt/homebrew/lib/libhidapi.0.dylib" "@executable_pat
 install_name_tool -change "/opt/homebrew/opt/hidapi/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
 install_name_tool -id "@executable_path/../Frameworks/libhidapi.0.dylib" "$FRAMEWORKS/libhidapi.0.dylib"
 
+if [[ "${CODESIGN_IDENTITY:-}" != "skip" ]]; then
+  codesign --force --sign - "$FRAMEWORKS/libhidapi.0.dylib" 2>/dev/null || true
+  codesign --force --sign - -o runtime --entitlements "$ROOT/SwiGi/SwiGi/SwiGi.entitlements" "$APP" 2>/dev/null || true
+fi
+
 mkdir -p "$RELEASES_DIR"
 ZIP_PATH="$RELEASES_DIR/$ZIP_NAME"
 rm -f "$ZIP_PATH"
@@ -58,6 +68,6 @@ echo "Creating $ZIP_PATH..."
 ditto -c -k --sequesterRsrc --keepParent "$APP" "$ZIP_PATH"
 
 echo "Done."
-echo "  App:  $APP"
+echo "  App:  $APP ($(lipo -info "$BINARY"))"
 echo "  Zip:  $ZIP_PATH"
 ls -lh "$ZIP_PATH"

@@ -27,7 +27,7 @@ A ready-to-run build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.0.0-macOS-arm64.zip`](releases/SwiGi-1.0.0-macOS-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
+| [`SwiGi-1.1.0-macOS26-arm64.zip`](releases/SwiGi-1.1.0-macOS26-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
 
 **Install:**
 
@@ -74,8 +74,10 @@ The app runs as a menu bar agent (`LSUIElement`) with no Dock icon. Use **Quit S
 ```
 SwiGi-Mac-App/
 ├── swigi.py              # Original Python reference implementation
+├── assets/               # Source app icon (1024×1024)
 ├── releases/             # Pre-built .zip downloads
 ├── scripts/
+│   ├── generate-app-icon.sh
 │   └── package-release.sh
 ├── SwiGi/
 │   ├── SwiGi.xcodeproj   # Xcode project
