@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>SwiGi</AssemblyName>
     <RootNamespace>SwiGi.Win</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.1.1</Version>
     <Company>SwiGi</Company>
     <Product>SwiGi</Product>
     <Description>Synchronize Logitech Easy-Switch between keyboard and mouse</Description>

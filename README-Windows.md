@@ -29,7 +29,7 @@ python3 .\scripts\generate-app-icon-windows.py
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.0.0-Windows11-x64.zip`](releases/SwiGi-1.0.0-Windows11-x64.zip) | **Windows 10/11 (x64)** |
+| [`SwiGi-1.1.1-Windows11-x64.zip`](releases/SwiGi-1.1.1-Windows11-x64.zip) | **Windows 10/11 (x64)** |
 
 Unzip and run `SwiGi.exe`. Requires [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0).
 
