@@ -85,8 +85,11 @@ The app runs as a menu bar agent (`LSUIElement`) with no Dock icon. Use **Quit S
 ```
 SwiGi-Mac-App/
 ├── swigi.py              # Original Python reference implementation
+├── assets/               # Source app icon (1024×1024)
 ├── releases/             # Pre-built .zip downloads
 ├── scripts/
+│   ├── build-hidapi-x86_64.sh
+│   ├── generate-app-icon.sh
 │   └── package-release.sh
 ├── SwiGi/
 │   ├── SwiGi.xcodeproj   # Xcode project
