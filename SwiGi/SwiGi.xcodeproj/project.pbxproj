@@ -1,0 +1,325 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		130D4A5FA74E43E285CEDDB5 /* HIDAPIBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEAABF08C06472EB16A22AF /* HIDAPIBridge.swift */; };
+		19466F0F6EC146E4AD621D3B /* SwiGiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13C2192AEED49F7A93E48A1 /* SwiGiApp.swift */; };
+		26EB1503437A495ABA19AEB3 /* HIDPPProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69654C285604C2982932B24 /* HIDPPProtocol.swift */; };
+		2E2E8FA2BEDC4D439DC5182E /* SwiGiEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11A64C1A9A480DA094DCF2 /* SwiGiEngine.swift */; };
+		34A9562952614EB2AD7D75FF /* DeviceDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60D8880B0A24BB9BB03D188 /* DeviceDiscovery.swift */; };
+		3CA940C6128545C8B631D703 /* HIDTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A782FD189D4F45ABF5FE82 /* HIDTransport.swift */; };
+		407826DA11AB4609B6ED21C8 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7584625D1DD4F789BE24E0D /* MenuBarContentView.swift */; };
+		6A0A330C49AD4BEA9F9B2E20 /* HIDPPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D956840FA4626B1CF7E97 /* HIDPPConstants.swift */; };
+		E20F094375D84922A63C1554 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F90B9E7EC2514BF28F48C031 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		09D0C59A1290407398B244FA /* SwiGi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiGi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		635D956840FA4626B1CF7E97 /* HIDPPConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDPPConstants.swift; sourceTree = "<group>"; };
+		AA1111111111111111111111 /* SwiGi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiGi.entitlements; sourceTree = "<group>"; };
+		AC11A64C1A9A480DA094DCF2 /* SwiGiEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiGiEngine.swift; sourceTree = "<group>"; };
+		B60D8880B0A24BB9BB03D188 /* DeviceDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDiscovery.swift; sourceTree = "<group>"; };
+		B69654C285604C2982932B24 /* HIDPPProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDPPProtocol.swift; sourceTree = "<group>"; };
+		C7584625D1DD4F789BE24E0D /* MenuBarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContentView.swift; sourceTree = "<group>"; };
+		CFEAABF08C06472EB16A22AF /* HIDAPIBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDAPIBridge.swift; sourceTree = "<group>"; };
+		D8A782FD189D4F45ABF5FE82 /* HIDTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDTransport.swift; sourceTree = "<group>"; };
+		DF96058E46B446998EE9D730 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F13C2192AEED49F7A93E48A1 /* SwiGiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiGiApp.swift; sourceTree = "<group>"; };
+		F90B9E7EC2514BF28F48C031 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BB2222222222222222222222 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		112233445566778899AABBCC /* include */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		CC3333333333333333333333 = {
+			isa = PBXGroup;
+			children = (
+				DD4444444444444444444444 /* SwiGi */,
+				EE5555555555555555555555 /* CHIDAPI */,
+				FF6666666666666666666666 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DD4444444444444444444444 /* SwiGi */ = {
+			isa = PBXGroup;
+			children = (
+				F13C2192AEED49F7A93E48A1 /* SwiGiApp.swift */,
+				C7584625D1DD4F789BE24E0D /* MenuBarContentView.swift */,
+				AC11A64C1A9A480DA094DCF2 /* SwiGiEngine.swift */,
+				635D956840FA4626B1CF7E97 /* HIDPPConstants.swift */,
+				D8A782FD189D4F45ABF5FE82 /* HIDTransport.swift */,
+				B69654C285604C2982932B24 /* HIDPPProtocol.swift */,
+				B60D8880B0A24BB9BB03D188 /* DeviceDiscovery.swift */,
+				CFEAABF08C06472EB16A22AF /* HIDAPIBridge.swift */,
+				F90B9E7EC2514BF28F48C031 /* Assets.xcassets */,
+				DF96058E46B446998EE9D730 /* Info.plist */,
+				AA1111111111111111111111 /* SwiGi.entitlements */,
+			);
+			path = SwiGi;
+			sourceTree = "<group>";
+		};
+		EE5555555555555555555555 /* CHIDAPI */ = {
+			isa = PBXGroup;
+			children = (
+				112233445566778899AABBCC /* include */,
+			);
+			path = CHIDAPI;
+			sourceTree = "<group>";
+		};
+		FF6666666666666666666666 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				09D0C59A1290407398B244FA /* SwiGi.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		887766554433221100FFEEDD /* SwiGi */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 99887766554433221100FFEE /* Build configuration list for PBXNativeTarget "SwiGi" */;
+			buildPhases = (
+				AABBCCDDEEFF001122334455 /* Sources */,
+				BB2222222222222222222222 /* Frameworks */,
+				CCDDEEFF0011223344556677 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiGi;
+			productName = SwiGi;
+			productReference = 09D0C59A1290407398B244FA /* SwiGi.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DDEEFF001122334455667788 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					887766554433221100FFEEDD = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = 112233445566778899AABBDD /* Build configuration list for PBXProject "SwiGi" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CC3333333333333333333333;
+			productRefGroup = FF6666666666666666666666 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				887766554433221100FFEEDD /* SwiGi */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CCDDEEFF0011223344556677 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E20F094375D84922A63C1554 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AABBCCDDEEFF001122334455 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19466F0F6EC146E4AD621D3B /* SwiGiApp.swift in Sources */,
+				407826DA11AB4609B6ED21C8 /* MenuBarContentView.swift in Sources */,
+				2E2E8FA2BEDC4D439DC5182E /* SwiGiEngine.swift in Sources */,
+				6A0A330C49AD4BEA9F9B2E20 /* HIDPPConstants.swift in Sources */,
+				3CA940C6128545C8B631D703 /* HIDTransport.swift in Sources */,
+				26EB1503437A495ABA19AEB3 /* HIDPPProtocol.swift in Sources */,
+				34A9562952614EB2AD7D75FF /* DeviceDiscovery.swift in Sources */,
+				130D4A5FA74E43E285CEDDB5 /* HIDAPIBridge.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		PROJDEBUG000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		PROJRELEASE00000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		TGTDEBUG0000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiGi/SwiGi.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 37SX2NWRR7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/homebrew/include,
+					/usr/local/include,
+				);
+				INFOPLIST_FILE = SwiGi/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/homebrew/lib,
+					/usr/local/lib,
+				);
+				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lhidapi",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.swigi.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/CHIDAPI/include";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		TGTRELEASE000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiGi/SwiGi.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 37SX2NWRR7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/homebrew/include,
+					/usr/local/include,
+				);
+				INFOPLIST_FILE = SwiGi/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/homebrew/lib,
+					/usr/local/lib,
+				);
+				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lhidapi",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.swigi.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/CHIDAPI/include";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		112233445566778899AABBDD /* Build configuration list for PBXProject "SwiGi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				PROJDEBUG000000000000001 /* Debug */,
+				PROJRELEASE00000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		99887766554433221100FFEE /* Build configuration list for PBXNativeTarget "SwiGi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				TGTDEBUG0000000000000003 /* Debug */,
+				TGTRELEASE000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DDEEFF001122334455667788 /* Project object */;
+}
