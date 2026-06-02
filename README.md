@@ -4,7 +4,51 @@ Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Blue
 
 This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 26+**.
 
-## Requirements
+## macOS compatibility
+
+| Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
+|---------|--------------------------|----------------------------|
+| **macOS 26+** | Yes | Yes |
+| macOS 13–25 | No (not built/tested for these targets) | Yes |
+| **macOS 12 (Monterey)** | **No** | Yes |
+
+The native app is **not compatible with macOS 12**. Reasons:
+
+1. **Deployment target is macOS 26.0** — the shipped binary requires Tahoe or later.
+2. **`MenuBarExtra`** (SwiftUI menu bar API) requires **macOS 13+**; macOS 12 would need an AppKit `NSStatusItem` rewrite.
+3. The release build is compiled with **Xcode 26 / macOS 26 SDK**, which does not target older systems.
+
+On macOS 12, use the Python script instead:
+
+```bash
+brew install hidapi python3
+python3 swigi.py
+```
+
+To support older macOS with a native app would require lowering the deployment target, replacing `MenuBarExtra` with AppKit, and building with an older Xcode SDK.
+
+## Download (pre-built binary)
+
+A ready-to-run build is in [`releases/`](releases/):
+
+| File | Platform |
+|------|----------|
+| [`SwiGi-1.0.0-macOS-arm64.zip`](releases/SwiGi-1.0.0-macOS-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
+
+**Install:**
+
+1. Download and unzip the file.
+2. Move `SwiGi.app` to `/Applications` (or anywhere you prefer).
+3. First launch: if macOS blocks the app, open **System Settings → Privacy & Security** and click **Open Anyway** (the app is not notarized).
+4. Click the SwiGi menu bar icon → **Start**.
+
+To rebuild the release zip locally:
+
+```bash
+./scripts/package-release.sh
+```
+
+## Requirements (build from source)
 
 - macOS 26.0 or later
 - Xcode 26+
@@ -42,6 +86,9 @@ The app runs as a menu bar agent (`LSUIElement`) with no Dock icon. Use **Quit S
 ```
 SwiGi-Mac-App/
 ├── swigi.py              # Original Python reference implementation
+├── releases/             # Pre-built .zip downloads
+├── scripts/
+│   └── package-release.sh
 ├── SwiGi/
 │   ├── SwiGi.xcodeproj   # Xcode project
 │   ├── SwiGi/            # Swift app sources
@@ -111,7 +158,7 @@ Replace `SwiGi-Mac-App` with your preferred repository name.
 
 ## Distribution note
 
-Development builds link against Homebrew’s `libhidapi.dylib`. For a distributable `.app`, bundle `libhidapi.dylib` inside `SwiGi.app/Contents/Frameworks/` and adjust run-path search paths, or ship via Homebrew cask with a hidapi dependency.
+Release builds bundle `libhidapi.dylib` inside the app (`Contents/Frameworks/`). Run `./scripts/package-release.sh` to produce a new zip in `releases/`. For wider distribution, consider notarizing the app and attaching builds to GitHub Releases instead of committing large binaries to git.
 
 ## License
 
