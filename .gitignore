@@ -6,6 +6,9 @@ DerivedData/
 *.xcscmblueprint
 xcuserdata/
 
+# Vendored hidapi source checkout (binary lib is committed)
+vendor/hidapi-x86_64/src/
+
 # Swift Package Manager
 .build/
 Packages/

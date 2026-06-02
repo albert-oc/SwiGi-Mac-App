@@ -8,13 +8,13 @@ CONFIG="Release"
 BUILD_DIR="$ROOT/build"
 APP="$BUILD_DIR/Release/SwiGi.app"
 RELEASES_DIR="$ROOT/releases"
+ARCH="x86_64"
+ARCH_LABEL="intel"
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
 MIN_OS=$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration "$CONFIG" -showBuildSettings 2>/dev/null | awk -F' = ' '$1 == "    MACOSX_DEPLOYMENT_TARGET" {print $2; exit}')
-MIN_OS="${MIN_OS:-26.0}"
+MIN_OS="${MIN_OS:-13.0}"
 MIN_OS_LABEL="macOS${MIN_OS%%.*}"
-ARCH="$(uname -m)"
-ARCH_LABEL="$ARCH"
 ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH_LABEL}.zip"
 
 "$ROOT/scripts/build-hidapi-static.sh" "$ARCH"
@@ -27,6 +27,8 @@ xcodebuild \
   -derivedDataPath "$BUILD_DIR/DerivedData" \
   SYMROOT="$BUILD_DIR" \
   OBJROOT="$BUILD_DIR/Intermediates" \
+  ARCHS="$ARCH" \
+  ONLY_ACTIVE_ARCH=NO \
   -destination 'platform=macOS' \
   build
 
@@ -36,6 +38,11 @@ if [[ ! -d "$APP" ]]; then
 fi
 
 BINARY="$APP/Contents/MacOS/SwiGi"
+APP_ARCH="$(lipo -info "$BINARY" 2>/dev/null | awk -F': ' '{print $NF}')"
+if [[ "$APP_ARCH" != *x86_64* ]]; then
+  echo "error: expected x86_64 binary, got: $APP_ARCH" >&2
+  exit 1
+fi
 
 if otool -L "$BINARY" | grep -q libhidapi; then
   echo "error: hidapi is still dynamically linked — static link failed" >&2

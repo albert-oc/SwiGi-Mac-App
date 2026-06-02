@@ -2,32 +2,34 @@
 
 Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Bluetooth keyboard and mouse. When you press Easy-Switch on the keyboard, SwiGi forwards the same host switch to the mouse so both devices stay paired to the same machine.
 
-This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 26+**.
+This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 13+** (Ventura and later).
+
+> **Branch `macos-13`:** Intel (x86_64) build for **macOS 13+**. Use `main` for Apple Silicon on macOS 26+.
 
 ## macOS compatibility
 
-| Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
-|---------|--------------------------|----------------------------|
-| **macOS 26+** | Yes | Yes |
-| macOS 13–25 | See MacOS-13 branch on this same repo | Yes |
-| **macOS 12 (Monterey)** | **No** | Yes |
+**macOS 13 (Ventura)** runs on both **Intel** and **Apple Silicon** Macs. This branch ships a native app for **Intel Macs (x86_64)** on macOS 13 and later.
 
-On macOS 12, use the Python script instead:
+| Version | Intel Mac (`x86_64`) | Apple Silicon (`arm64`) | Python script |
+|---------|----------------------|-------------------------|---------------|
+| **macOS 26+** | — | Yes (`main` branch) | Yes |
+| **macOS 13–25** | **Yes** (this branch) | Use `main` if on macOS 26+, or `swigi.py` | Yes |
+| **macOS 12 (Monterey)** | No | No | Yes |
+
+macOS 12 is not supported by the native app. On Monterey, use the Python script:
 
 ```bash
 brew install hidapi python3
 python3 swigi.py
 ```
 
-To support older macOS with a native app would require lowering the deployment target.
-
 ## Download (pre-built binary)
 
-A ready-to-run build is in [`releases/`](releases/):
+A ready-to-run **Intel** build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.1.1-macOS26-arm64.zip`](releases/SwiGi-1.1.1-macOS26-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
+| [`SwiGi-1.1.1-macOS13-intel.zip`](releases/SwiGi-1.1.1-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
 
 **Install:**
 
@@ -48,8 +50,9 @@ A ready-to-run build is in [`releases/`](releases/):
 
 ## Requirements (build from source)
 
-- macOS 26.0 or later
-- Xcode 15+ (Xcode 26 recommended)
+- **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
+- macOS 13.0 or later (to run the built app)
+- Xcode 15+ recommended
 - No Homebrew hidapi needed — `libhidapi` is linked statically (`vendor/hidapi-static/`)
 
 - Logitech Bluetooth keyboard and mouse with HID++ **CHANGE_HOST** support (same devices supported by the Python script)
@@ -83,6 +86,7 @@ SwiGi-Mac-App/
 ├── assets/               # Source app icon (1024×1024)
 ├── releases/             # Pre-built .zip downloads
 ├── scripts/
+│   ├── build-hidapi-static.sh
 │   ├── generate-app-icon.sh
 │   └── package-release.sh
 ├── SwiGi/
@@ -91,16 +95,6 @@ SwiGi-Mac-App/
 │   └── CHIDAPI/          # hidapi module map for Swift
 └── README.md
 ```
-
-## GitHub repository setup
-
-To create a new GitHub repo and link this folder:
-
-### Prerequisites
-
-1. A [GitHub account](https://github.com/signup)
-2. Git installed (included with Xcode Command Line Tools)
-3. Optional: [GitHub CLI](https://cli.github.com/) (`gh`) for creating repos from the terminal
 
 ## License
 
