@@ -27,7 +27,7 @@ internal sealed class TrayApplicationContext : ApplicationContext
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(new ToolStripMenuItem("Quit", null, OnQuit));
 
-        var trayIcon = LoadTrayIcon();
+        var trayIcon = TrayIconLoader.Load();
         _trayIcon = new NotifyIcon
         {
             Icon = trayIcon,
@@ -36,16 +36,6 @@ internal sealed class TrayApplicationContext : ApplicationContext
             ContextMenuStrip = menu
         };
         _trayIcon.DoubleClick += (_, _) => OnStartStop(null, EventArgs.Empty);
-    }
-
-    private static Icon LoadTrayIcon()
-    {
-        var path = Path.Combine(AppContext.BaseDirectory, "app.ico");
-        if (File.Exists(path))
-        {
-            return new Icon(path);
-        }
-        return SystemIcons.Application;
     }
 
     private void OnStatusChanged(EngineStatus status)

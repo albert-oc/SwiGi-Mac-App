@@ -16,6 +16,7 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="app.ico" LogicalName="SwiGi.Win.app.ico" />
     <Content Include="app.ico" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\native\win-x64\hidapi.dll" Link="hidapi.dll" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\native\win-x64\hidapi.dll')" />
   </ItemGroup>
