@@ -9,8 +9,14 @@ BUILD_DIR="$ROOT/build"
 APP="$BUILD_DIR/Release/SwiGi.app"
 RELEASES_DIR="$ROOT/releases"
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
+MIN_OS=$(/usr/libexec/PlistBuddy -c "Print :objects:PROJDEBUG000000000000001:buildSettings:MACOSX_DEPLOYMENT_TARGET" "$PROJECT/project.pbxproj" 2>/dev/null || true)
+if [[ -z "$MIN_OS" ]]; then
+  MIN_OS=$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -showBuildSettings 2>/dev/null | awk -F' = ' '/MACOSX_DEPLOYMENT_TARGET/{print $2; exit}')
+fi
+MIN_OS="${MIN_OS:-13.0}"
+MIN_OS_LABEL="macOS${MIN_OS%%.*}"
 ARCH="$(uname -m)"
-ZIP_NAME="SwiGi-${VERSION}-macOS-${ARCH}.zip"
+ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH}.zip"
 
 echo "Building SwiGi ($CONFIG)..."
 xcodebuild \

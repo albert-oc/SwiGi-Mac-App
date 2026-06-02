@@ -2,30 +2,26 @@
 
 Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Bluetooth keyboard and mouse. When you press Easy-Switch on the keyboard, SwiGi forwards the same host switch to the mouse so both devices stay paired to the same machine.
 
-This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 26+**.
+This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 13+** (Ventura and later).
+
+> **Branch `macos-13`:** deployment target lowered to macOS 13.0. Use `main` for the macOS 26+ build.
 
 ## macOS compatibility
 
 | Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
 |---------|--------------------------|----------------------------|
-| **macOS 26+** | Yes | Yes |
-| macOS 13–25 | No (not built/tested for these targets) | Yes |
+| **macOS 26+** | Yes (see `main` branch) | Yes |
+| **macOS 13–25** | **Yes** (this branch) | Yes |
 | **macOS 12 (Monterey)** | **No** | Yes |
 
-The native app is **not compatible with macOS 12**. Reasons:
+This branch targets **macOS 13.0 (Ventura)** as the minimum version. It uses SwiftUI `MenuBarExtra`, which requires macOS 13+.
 
-1. **Deployment target is macOS 26.0** — the shipped binary requires Tahoe or later.
-2. **`MenuBarExtra`** (SwiftUI menu bar API) requires **macOS 13+**; macOS 12 would need an AppKit `NSStatusItem` rewrite.
-3. The release build is compiled with **Xcode 26 / macOS 26 SDK**, which does not target older systems.
-
-On macOS 12, use the Python script instead:
+macOS 12 is not supported by the native app (would require an AppKit `NSStatusItem` rewrite). On Monterey, use the Python script:
 
 ```bash
 brew install hidapi python3
 python3 swigi.py
 ```
-
-To support older macOS with a native app would require lowering the deployment target, replacing `MenuBarExtra` with AppKit, and building with an older Xcode SDK.
 
 ## Download (pre-built binary)
 
@@ -33,7 +29,7 @@ A ready-to-run build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.0.0-macOS-arm64.zip`](releases/SwiGi-1.0.0-macOS-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
+| [`SwiGi-1.0.0-macOS13-arm64.zip`](releases/SwiGi-1.0.0-macOS13-arm64.zip) | Apple Silicon (M1/M2/M3/M4), **macOS 13+** |
 
 **Install:**
 
@@ -50,8 +46,7 @@ To rebuild the release zip locally:
 
 ## Requirements (build from source)
 
-- macOS 26.0 or later
-- Xcode 26+
+- macOS 13.0 or later (to run); Xcode 15+ recommended for building
 - [hidapi](https://github.com/libusb/hidapi) (for development builds):
 
   ```bash
