@@ -4,7 +4,7 @@ Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Blue
 
 This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 13+** (Ventura and later).
 
-> **Branch `macos-13`:** Intel (x86_64) build for **macOS 13+**. Use `main` for Apple Silicon on macOS 26+.
+> **Branch `macos-13`:** Intel (x86_64) build for **macOS 13+**. Use **`main`** for Apple Silicon on macOS 26+.
 
 ## macOS compatibility
 
@@ -35,27 +35,18 @@ A ready-to-run **Intel** build is in [`releases/`](releases/):
 
 1. Download and unzip the file.
 2. Move `SwiGi.app` to `/Applications` (or anywhere you prefer).
-3. Remove Gatekeeper quarantine: `xattr -cr /Applications/SwiGi.app`
-4. If macOS still blocks the app (not notarized), right-click `SwiGi.app` → **Open** → **Open**.
-5. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
-6. Click the icon → **Start**.
-
-### Troubleshooting first launch
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| “Not opened” / malware warning | App is not notarized | `xattr -cr /Applications/SwiGi.app`, then right-click → Open |
-| Double-click does nothing | Menu bar app (no window/Dock icon) | Check the menu bar for the SwiGi icon |
-| App quits instantly (v1.1.0) | Broken bundled `libhidapi` signature | Upgrade to **v1.1.1+** (hidapi is now statically linked) |
+3. Open `SwiGi.app` (allow in **System Settings → Privacy & Security** if macOS blocks an unsigned app).
+4. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
+5. Click the icon → **Start**.
 
 ## Requirements (build from source)
 
 - **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
 - macOS 13.0 or later (to run the built app)
-- Xcode 15+ recommended
-- No Homebrew hidapi needed — `libhidapi` is linked statically (`vendor/hidapi-static/`)
-
+- Xcode 15+
 - Logitech Bluetooth keyboard and mouse with HID++ **CHANGE_HOST** support (same devices supported by the Python script)
+
+`libhidapi` is linked statically (`vendor/hidapi-static/`); Homebrew hidapi is not required.
 
 ## Build & Run
 
