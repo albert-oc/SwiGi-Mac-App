@@ -4,12 +4,14 @@ Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Blue
 
 This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 26+**.
 
+> **Other platforms:** branch **`windows-11`** (Windows tray app) · branch **`macos-13`** (Intel Mac, macOS 13+)
+
 ## macOS compatibility
 
 | Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
 |---------|--------------------------|----------------------------|
 | **macOS 26+** | Yes | Yes |
-| macOS 13–25 | See MacOS-13 branch on this same repo | Yes |
+| macOS 13–25 | See **`macos-13`** branch | Yes |
 | **macOS 12 (Monterey)** | **No** | Yes |
 
 On macOS 12, use the Python script instead:
@@ -18,8 +20,6 @@ On macOS 12, use the Python script instead:
 brew install hidapi python3
 python3 swigi.py
 ```
-
-To support older macOS with a native app would require lowering the deployment target.
 
 ## Download (pre-built binary)
 
@@ -33,26 +33,17 @@ A ready-to-run build is in [`releases/`](releases/):
 
 1. Download and unzip the file.
 2. Move `SwiGi.app` to `/Applications` (or anywhere you prefer).
-3. Remove Gatekeeper quarantine: `xattr -cr /Applications/SwiGi.app`
-4. If macOS still blocks the app (not notarized), right-click `SwiGi.app` → **Open** → **Open**.
-5. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
-6. Click the icon → **Start**.
-
-### Troubleshooting first launch
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| “Not opened” / malware warning | App is not notarized | `xattr -cr /Applications/SwiGi.app`, then right-click → Open |
-| Double-click does nothing | Menu bar app (no window/Dock icon) | Check the menu bar for the SwiGi icon |
-| App quits instantly (v1.1.0) | Broken bundled `libhidapi` signature | Upgrade to **v1.1.1+** (hidapi is now statically linked) |
+3. Open `SwiGi.app` (allow in **System Settings → Privacy & Security** if macOS blocks an unsigned app).
+4. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
+5. Click the icon → **Start**.
 
 ## Requirements (build from source)
 
 - macOS 26.0 or later
-- Xcode 15+ (Xcode 26 recommended)
-- No Homebrew hidapi needed — `libhidapi` is linked statically (`vendor/hidapi-static/`)
-
+- Xcode 15+
 - Logitech Bluetooth keyboard and mouse with HID++ **CHANGE_HOST** support (same devices supported by the Python script)
+
+`libhidapi` is linked statically (`vendor/hidapi-static/`); Homebrew hidapi is not required.
 
 ## Build & Run
 
@@ -91,16 +82,6 @@ SwiGi-Mac-App/
 │   └── CHIDAPI/          # hidapi module map for Swift
 └── README.md
 ```
-
-## GitHub repository setup
-
-To create a new GitHub repo and link this folder:
-
-### Prerequisites
-
-1. A [GitHub account](https://github.com/signup)
-2. Git installed (included with Xcode Command Line Tools)
-3. Optional: [GitHub CLI](https://cli.github.com/) (`gh`) for creating repos from the terminal
 
 ## License
 
