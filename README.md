@@ -27,24 +27,30 @@ A ready-to-run build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.1.0-macOS26-arm64.zip`](releases/SwiGi-1.1.0-macOS26-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
+| [`SwiGi-1.1.1-macOS26-arm64.zip`](releases/SwiGi-1.1.1-macOS26-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
 
 **Install:**
 
 1. Download and unzip the file.
 2. Move `SwiGi.app` to `/Applications` (or anywhere you prefer).
-3. First launch: if macOS blocks the app, open **System Settings → Privacy & Security** and click **Open Anyway** (the app is not notarized).
-4. Click the SwiGi menu bar icon → **Start**.
+3. Remove Gatekeeper quarantine: `xattr -cr /Applications/SwiGi.app`
+4. If macOS still blocks the app (not notarized), right-click `SwiGi.app` → **Open** → **Open**.
+5. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
+6. Click the icon → **Start**.
+
+### Troubleshooting first launch
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| “Not opened” / malware warning | App is not notarized | `xattr -cr /Applications/SwiGi.app`, then right-click → Open |
+| Double-click does nothing | Menu bar app (no window/Dock icon) | Check the menu bar for the SwiGi icon |
+| App quits instantly (v1.1.0) | Broken bundled `libhidapi` signature | Upgrade to **v1.1.1+** (hidapi is now statically linked) |
 
 ## Requirements (build from source)
 
 - macOS 26.0 or later
-- Xcode 26+
-- [hidapi](https://github.com/libusb/hidapi) (for development builds):
-
-  ```bash
-  brew install hidapi
-  ```
+- Xcode 15+ (Xcode 26 recommended)
+- No Homebrew hidapi needed — `libhidapi` is linked statically (`vendor/hidapi-static/`)
 
 - Logitech Bluetooth keyboard and mouse with HID++ **CHANGE_HOST** support (same devices supported by the Python script)
 

@@ -11,7 +11,8 @@ xcuserdata/
 Packages/
 Package.resolved
 
-# Python
+# Vendored hidapi source checkout (static libs are committed)
+vendor/hidapi-src/
 __pycache__/
 *.py[cod]
 .venv/

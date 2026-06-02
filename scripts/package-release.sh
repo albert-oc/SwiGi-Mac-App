@@ -17,6 +17,8 @@ ARCH="$(uname -m)"
 ARCH_LABEL="$ARCH"
 ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH_LABEL}.zip"
 
+"$ROOT/scripts/build-hidapi-static.sh" "$ARCH"
+
 echo "Building SwiGi ($CONFIG, $ARCH)..."
 xcodebuild \
   -project "$PROJECT" \
@@ -33,31 +35,24 @@ if [[ ! -d "$APP" ]]; then
   exit 1
 fi
 
-FRAMEWORKS="$APP/Contents/Frameworks"
-mkdir -p "$FRAMEWORKS"
+BINARY="$APP/Contents/MacOS/SwiGi"
 
-HIDAPI_SRC="$(brew --prefix hidapi 2>/dev/null)/lib/libhidapi.0.dylib"
-if [[ ! -f "$HIDAPI_SRC" ]]; then
-  HIDAPI_SRC="/opt/homebrew/lib/libhidapi.0.dylib"
-fi
-if [[ ! -f "$HIDAPI_SRC" ]]; then
-  echo "error: libhidapi not found — run: brew install hidapi" >&2
+if otool -L "$BINARY" | grep -q libhidapi; then
+  echo "error: hidapi is still dynamically linked — static link failed" >&2
+  otool -L "$BINARY" | grep hidapi
   exit 1
 fi
 
-echo "Bundling libhidapi..."
-cp "$HIDAPI_SRC" "$FRAMEWORKS/libhidapi.0.dylib"
-chmod 755 "$FRAMEWORKS/libhidapi.0.dylib"
-
-BINARY="$APP/Contents/MacOS/SwiGi"
-install_name_tool -change "@rpath/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -change "/opt/homebrew/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -change "/opt/homebrew/opt/hidapi/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -id "@executable_path/../Frameworks/libhidapi.0.dylib" "$FRAMEWORKS/libhidapi.0.dylib"
-
-if [[ "${CODESIGN_IDENTITY:-}" != "skip" ]]; then
-  codesign --force --sign - "$FRAMEWORKS/libhidapi.0.dylib" 2>/dev/null || true
-  codesign --force --sign - -o runtime --entitlements "$ROOT/SwiGi/SwiGi/SwiGi.entitlements" "$APP" 2>/dev/null || true
+echo "Smoke test: launch binary..."
+"$BINARY" &
+PID=$!
+sleep 2
+if kill -0 "$PID" 2>/dev/null; then
+  kill "$PID" 2>/dev/null || true
+  echo "Smoke test passed (process started)."
+else
+  echo "error: app exited immediately — launch failed" >&2
+  exit 1
 fi
 
 mkdir -p "$RELEASES_DIR"
