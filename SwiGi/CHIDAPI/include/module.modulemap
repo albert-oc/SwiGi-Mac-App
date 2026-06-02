@@ -1,5 +1,4 @@
 module CHIDAPI [system] {
     header "hidapi_bridge.h"
-    link "hidapi"
     export *
 }

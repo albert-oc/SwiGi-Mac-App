@@ -226,14 +226,13 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37SX2NWRR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../vendor/hidapi-x86_64/include",
-					/usr/local/include,
+					"$(SRCROOT)/../vendor/hidapi-static/x86_64/include",
 				);
 				INFOPLIST_FILE = SwiGi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -242,14 +241,17 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../vendor/hidapi-x86_64/lib",
-					/usr/local/lib,
+					"$(SRCROOT)/../vendor/hidapi-static/x86_64/lib",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lhidapi",
+					"-framework",
+					IOKit,
+					"-framework",
+					CoreFoundation,
+					"$(SRCROOT)/../vendor/hidapi-static/x86_64/lib/libhidapi.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.swigi.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -269,14 +271,13 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 37SX2NWRR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../vendor/hidapi-x86_64/include",
-					/usr/local/include,
+					"$(SRCROOT)/../vendor/hidapi-static/x86_64/include",
 				);
 				INFOPLIST_FILE = SwiGi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -285,14 +286,17 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../vendor/hidapi-x86_64/lib",
-					/usr/local/lib,
+					"$(SRCROOT)/../vendor/hidapi-static/x86_64/lib",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lhidapi",
+					"-framework",
+					IOKit,
+					"-framework",
+					CoreFoundation,
+					"$(SRCROOT)/../vendor/hidapi-static/x86_64/lib/libhidapi.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.swigi.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";

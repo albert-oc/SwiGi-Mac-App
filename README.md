@@ -8,15 +8,13 @@ This project is a Swift port of the original [`swigi.py`](swigi.py) script, pack
 
 ## macOS compatibility
 
-**macOS 13 (Ventura)** is an operating system version — it runs on both **Intel** and **Apple Silicon** Macs. This branch ships a native app for **Intel Macs (x86_64)** on macOS 13 and later, which covers many older Macs that remain on Ventura.
+**macOS 13 (Ventura)** runs on both **Intel** and **Apple Silicon** Macs. This branch ships a native app for **Intel Macs (x86_64)** on macOS 13 and later.
 
 | Version | Intel Mac (`x86_64`) | Apple Silicon (`arm64`) | Python script |
 |---------|----------------------|-------------------------|---------------|
 | **macOS 26+** | — | Yes (`main` branch) | Yes |
 | **macOS 13–25** | **Yes** (this branch) | Use `main` if on macOS 26+, or `swigi.py` | Yes |
 | **macOS 12 (Monterey)** | No | No | Yes |
-
-This branch targets **macOS 13.0 (Ventura)** minimum and builds **x86_64 only**. It uses SwiftUI `MenuBarExtra`, which requires macOS 13+.
 
 macOS 12 is not supported by the native app. On Monterey, use the Python script:
 
@@ -31,31 +29,31 @@ A ready-to-run **Intel** build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.1.0-macOS13-intel.zip`](releases/SwiGi-1.1.0-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
+| [`SwiGi-1.1.1-macOS13-intel.zip`](releases/SwiGi-1.1.1-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
 
 **Install:**
 
 1. Download and unzip the file.
 2. Move `SwiGi.app` to `/Applications` (or anywhere you prefer).
-3. First launch: if macOS blocks the app, open **System Settings → Privacy & Security** and click **Open Anyway** (the app is not notarized).
-4. Click the SwiGi menu bar icon → **Start**.
+3. Remove Gatekeeper quarantine: `xattr -cr /Applications/SwiGi.app`
+4. If macOS still blocks the app (not notarized), right-click `SwiGi.app` → **Open** → **Open**.
+5. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
+6. Click the icon → **Start**.
 
-To rebuild the release zip locally:
+### Troubleshooting first launch
 
-```bash
-./scripts/package-release.sh
-```
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| “Not opened” / malware warning | App is not notarized | `xattr -cr /Applications/SwiGi.app`, then right-click → Open |
+| Double-click does nothing | Menu bar app (no window/Dock icon) | Check the menu bar for the SwiGi icon |
+| App quits instantly (v1.1.0) | Broken bundled `libhidapi` signature | Upgrade to **v1.1.1+** (hidapi is now statically linked) |
 
 ## Requirements (build from source)
 
 - **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
 - macOS 13.0 or later (to run the built app)
 - Xcode 15+ recommended
-- [hidapi](https://github.com/libusb/hidapi) (for development builds):
-
-  ```bash
-  brew install hidapi
-  ```
+- No Homebrew hidapi needed — `libhidapi` is linked statically (`vendor/hidapi-static/`)
 
 - Logitech Bluetooth keyboard and mouse with HID++ **CHANGE_HOST** support (same devices supported by the Python script)
 
@@ -88,7 +86,7 @@ SwiGi-Mac-App/
 ├── assets/               # Source app icon (1024×1024)
 ├── releases/             # Pre-built .zip downloads
 ├── scripts/
-│   ├── build-hidapi-x86_64.sh
+│   ├── build-hidapi-static.sh
 │   ├── generate-app-icon.sh
 │   └── package-release.sh
 ├── SwiGi/
@@ -98,70 +96,6 @@ SwiGi-Mac-App/
 └── README.md
 ```
 
-## GitHub repository setup
-
-To create a new GitHub repo and link this folder:
-
-### Prerequisites
-
-1. A [GitHub account](https://github.com/signup)
-2. Git installed (included with Xcode Command Line Tools)
-3. Optional: [GitHub CLI](https://cli.github.com/) (`gh`) for creating repos from the terminal
-
-### Option A — Using GitHub CLI (recommended)
-
-```bash
-# Install GitHub CLI if needed
-brew install gh
-
-# Authenticate (one-time)
-gh auth login
-
-# From this folder
-cd /Users/albert.oc/Projects/SwiGi-Mac-App
-git init
-git add .
-git commit -m "Initial commit: native macOS SwiGi menu bar app"
-
-# Create repo on GitHub and push (choose public or private)
-gh repo create SwiGi-Mac-App --source=. --remote=origin --push
-```
-
-Replace `SwiGi-Mac-App` with your preferred repository name.
-
-### Option B — Using github.com (web UI)
-
-1. Go to [github.com/new](https://github.com/new)
-2. Set repository name (e.g. `SwiGi-Mac-App`), visibility, and **do not** initialize with README (this folder already has one)
-3. Click **Create repository**
-4. In Terminal, from this folder:
-
-   ```bash
-   cd /Users/albert.oc/Projects/SwiGi-Mac-App
-   git init
-   git add .
-   git commit -m "Initial commit: native macOS SwiGi menu bar app"
-   git branch -M main
-   git remote add origin git@github.com:YOUR_USERNAME/SwiGi-Mac-App.git
-   git push -u origin main
-   ```
-
-   Use the HTTPS URL instead of SSH if you prefer:
-
-   ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/SwiGi-Mac-App.git
-   ```
-
-### After linking
-
-- `git remote -v` — confirm the remote URL
-- `git push` — upload new commits
-- In Xcode: set your **Development Team** under Signing & Capabilities before distributing the app
-
-## Distribution note
-
-Release builds bundle `libhidapi.dylib` inside the app (`Contents/Frameworks/`). Run `./scripts/package-release.sh` to produce a new zip in `releases/`. For wider distribution, consider notarizing the app and attaching builds to GitHub Releases instead of committing large binaries to git.
-
 ## License
 
-See the original `swigi.py` header for hidapi licensing. Add your preferred license for the Swift app wrapper if you plan to publish the repo.
+See the original `swigi.py` header for hidapi licensing.

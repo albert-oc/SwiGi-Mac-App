@@ -8,22 +8,16 @@ CONFIG="Release"
 BUILD_DIR="$ROOT/build"
 APP="$BUILD_DIR/Release/SwiGi.app"
 RELEASES_DIR="$ROOT/releases"
-VENDOR="$ROOT/vendor/hidapi-x86_64"
 ARCH="x86_64"
 ARCH_LABEL="intel"
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
 MIN_OS=$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration "$CONFIG" -showBuildSettings 2>/dev/null | awk -F' = ' '$1 == "    MACOSX_DEPLOYMENT_TARGET" {print $2; exit}')
-if [[ -z "$MIN_OS" ]]; then
-  MIN_OS="13.0"
-fi
+MIN_OS="${MIN_OS:-13.0}"
 MIN_OS_LABEL="macOS${MIN_OS%%.*}"
 ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH_LABEL}.zip"
 
-if [[ ! -f "$VENDOR/lib/libhidapi.0.dylib" ]]; then
-  echo "Building vendored x86_64 hidapi..."
-  "$ROOT/scripts/build-hidapi-x86_64.sh"
-fi
+"$ROOT/scripts/build-hidapi-static.sh" "$ARCH"
 
 echo "Building SwiGi ($CONFIG, $ARCH)..."
 xcodebuild \
@@ -50,27 +44,22 @@ if [[ "$APP_ARCH" != *x86_64* ]]; then
   exit 1
 fi
 
-FRAMEWORKS="$APP/Contents/Frameworks"
-mkdir -p "$FRAMEWORKS"
-
-HIDAPI_SRC="$VENDOR/lib/libhidapi.0.dylib"
-if [[ ! -f "$HIDAPI_SRC" ]]; then
-  echo "error: $HIDAPI_SRC not found" >&2
+if otool -L "$BINARY" | grep -q libhidapi; then
+  echo "error: hidapi is still dynamically linked — static link failed" >&2
+  otool -L "$BINARY" | grep hidapi
   exit 1
 fi
 
-echo "Bundling x86_64 libhidapi..."
-cp "$HIDAPI_SRC" "$FRAMEWORKS/libhidapi.0.dylib"
-chmod 755 "$FRAMEWORKS/libhidapi.0.dylib"
-
-install_name_tool -change "@rpath/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -change "/opt/homebrew/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -change "/usr/local/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -id "@executable_path/../Frameworks/libhidapi.0.dylib" "$FRAMEWORKS/libhidapi.0.dylib"
-
-if [[ "${CODESIGN_IDENTITY:-}" != "skip" ]]; then
-  codesign --force --sign - "$FRAMEWORKS/libhidapi.0.dylib" 2>/dev/null || true
-  codesign --force --sign - -o runtime --entitlements "$ROOT/SwiGi/SwiGi/SwiGi.entitlements" "$APP" 2>/dev/null || true
+echo "Smoke test: launch binary..."
+"$BINARY" &
+PID=$!
+sleep 2
+if kill -0 "$PID" 2>/dev/null; then
+  kill "$PID" 2>/dev/null || true
+  echo "Smoke test passed (process started)."
+else
+  echo "error: app exited immediately — launch failed" >&2
+  exit 1
 fi
 
 mkdir -p "$RELEASES_DIR"
