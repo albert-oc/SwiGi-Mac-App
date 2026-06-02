@@ -19,7 +19,7 @@ brew install hidapi python3
 python3 swigi.py
 ```
 
-To support older macOS with a native app would require lowering the deployment target, replacing `MenuBarExtra` with AppKit, and building with an older Xcode SDK.
+To support older macOS with a native app would require lowering the deployment target.
 
 ## Download (pre-built binary)
 
