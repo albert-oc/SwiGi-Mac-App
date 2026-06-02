@@ -4,6 +4,8 @@ Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Blue
 
 This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 26+**.
 
+> **Other platforms:** [`windows-11`](https://github.com/albert-oc/SwiGi-Mac-App/tree/windows-11) — native Windows 11 tray app ([README-Windows.md](README-Windows.md)) · `macos-13` — Intel Mac, macOS 13+
+
 ## macOS compatibility
 
 | Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
