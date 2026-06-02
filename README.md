@@ -12,12 +12,6 @@ This project is a Swift port of the original [`swigi.py`](swigi.py) script, pack
 | macOS 13–25 | No (not built/tested for these targets) | Yes |
 | **macOS 12 (Monterey)** | **No** | Yes |
 
-The native app is **not compatible with macOS 12**. Reasons:
-
-1. **Deployment target is macOS 26.0** — the shipped binary requires Tahoe or later.
-2. **`MenuBarExtra`** (SwiftUI menu bar API) requires **macOS 13+**; macOS 12 would need an AppKit `NSStatusItem` rewrite.
-3. The release build is compiled with **Xcode 26 / macOS 26 SDK**, which does not target older systems.
-
 On macOS 12, use the Python script instead:
 
 ```bash
