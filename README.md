@@ -4,19 +4,21 @@ Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Blue
 
 This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 13+** (Ventura and later).
 
-> **Branch `macos-13`:** deployment target lowered to macOS 13.0. Use `main` for the macOS 26+ build.
+> **Branch `macos-13`:** Intel (x86_64) build for **macOS 13+**. Use `main` for Apple Silicon on macOS 26+.
 
 ## macOS compatibility
 
-| Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
-|---------|--------------------------|----------------------------|
-| **macOS 26+** | Yes (see `main` branch) | Yes |
-| **macOS 13–25** | **Yes** (this branch) | Yes |
-| **macOS 12 (Monterey)** | **No** | Yes |
+**macOS 13 (Ventura)** is an operating system version — it runs on both **Intel** and **Apple Silicon** Macs. This branch ships a native app for **Intel Macs (x86_64)** on macOS 13 and later, which covers many older Macs that remain on Ventura.
 
-This branch targets **macOS 13.0 (Ventura)** as the minimum version. It uses SwiftUI `MenuBarExtra`, which requires macOS 13+.
+| Version | Intel Mac (`x86_64`) | Apple Silicon (`arm64`) | Python script |
+|---------|----------------------|-------------------------|---------------|
+| **macOS 26+** | — | Yes (`main` branch) | Yes |
+| **macOS 13–25** | **Yes** (this branch) | Use `main` if on macOS 26+, or `swigi.py` | Yes |
+| **macOS 12 (Monterey)** | No | No | Yes |
 
-macOS 12 is not supported by the native app (would require an AppKit `NSStatusItem` rewrite). On Monterey, use the Python script:
+This branch targets **macOS 13.0 (Ventura)** minimum and builds **x86_64 only**. It uses SwiftUI `MenuBarExtra`, which requires macOS 13+.
+
+macOS 12 is not supported by the native app. On Monterey, use the Python script:
 
 ```bash
 brew install hidapi python3
@@ -25,11 +27,11 @@ python3 swigi.py
 
 ## Download (pre-built binary)
 
-A ready-to-run build is in [`releases/`](releases/):
+A ready-to-run **Intel** build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.0.0-macOS13-arm64.zip`](releases/SwiGi-1.0.0-macOS13-arm64.zip) | Apple Silicon (M1/M2/M3/M4), **macOS 13+** |
+| [`SwiGi-1.0.0-macOS13-intel.zip`](releases/SwiGi-1.0.0-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
 
 **Install:**
 
@@ -46,7 +48,9 @@ To rebuild the release zip locally:
 
 ## Requirements (build from source)
 
-- macOS 13.0 or later (to run); Xcode 15+ recommended for building
+- **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
+- macOS 13.0 or later (to run the built app)
+- Xcode 15+ recommended
 - [hidapi](https://github.com/libusb/hidapi) (for development builds):
 
   ```bash

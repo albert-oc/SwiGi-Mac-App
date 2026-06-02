@@ -8,17 +8,24 @@ CONFIG="Release"
 BUILD_DIR="$ROOT/build"
 APP="$BUILD_DIR/Release/SwiGi.app"
 RELEASES_DIR="$ROOT/releases"
-VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
-MIN_OS=$(/usr/libexec/PlistBuddy -c "Print :objects:PROJDEBUG000000000000001:buildSettings:MACOSX_DEPLOYMENT_TARGET" "$PROJECT/project.pbxproj" 2>/dev/null || true)
-if [[ -z "$MIN_OS" ]]; then
-  MIN_OS=$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -showBuildSettings 2>/dev/null | awk -F' = ' '/MACOSX_DEPLOYMENT_TARGET/{print $2; exit}')
-fi
-MIN_OS="${MIN_OS:-13.0}"
-MIN_OS_LABEL="macOS${MIN_OS%%.*}"
-ARCH="$(uname -m)"
-ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH}.zip"
+VENDOR="$ROOT/vendor/hidapi-x86_64"
+ARCH="x86_64"
+ARCH_LABEL="intel"
 
-echo "Building SwiGi ($CONFIG)..."
+VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$ROOT/SwiGi/SwiGi/Info.plist" 2>/dev/null || echo "1.0.0")
+MIN_OS=$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration "$CONFIG" -showBuildSettings 2>/dev/null | awk -F' = ' '$1 == "    MACOSX_DEPLOYMENT_TARGET" {print $2; exit}')
+if [[ -z "$MIN_OS" ]]; then
+  MIN_OS="13.0"
+fi
+MIN_OS_LABEL="macOS${MIN_OS%%.*}"
+ZIP_NAME="SwiGi-${VERSION}-${MIN_OS_LABEL}-${ARCH_LABEL}.zip"
+
+if [[ ! -f "$VENDOR/lib/libhidapi.0.dylib" ]]; then
+  echo "Building vendored x86_64 hidapi..."
+  "$ROOT/scripts/build-hidapi-x86_64.sh"
+fi
+
+echo "Building SwiGi ($CONFIG, $ARCH)..."
 xcodebuild \
   -project "$PROJECT" \
   -scheme "$SCHEME" \
@@ -26,6 +33,8 @@ xcodebuild \
   -derivedDataPath "$BUILD_DIR/DerivedData" \
   SYMROOT="$BUILD_DIR" \
   OBJROOT="$BUILD_DIR/Intermediates" \
+  ARCHS="$ARCH" \
+  ONLY_ACTIVE_ARCH=NO \
   -destination 'platform=macOS' \
   build
 
@@ -34,26 +43,29 @@ if [[ ! -d "$APP" ]]; then
   exit 1
 fi
 
-FRAMEWORKS="$APP/Contents/Frameworks"
-mkdir -p "$FRAMEWORKS"
-
-HIDAPI_SRC="$(brew --prefix hidapi 2>/dev/null)/lib/libhidapi.0.dylib"
-if [[ ! -f "$HIDAPI_SRC" ]]; then
-  HIDAPI_SRC="/opt/homebrew/lib/libhidapi.0.dylib"
-fi
-if [[ ! -f "$HIDAPI_SRC" ]]; then
-  echo "error: libhidapi not found — run: brew install hidapi" >&2
+BINARY="$APP/Contents/MacOS/SwiGi"
+APP_ARCH="$(lipo -info "$BINARY" 2>/dev/null | awk -F': ' '{print $NF}')"
+if [[ "$APP_ARCH" != *x86_64* ]]; then
+  echo "error: expected x86_64 binary, got: $APP_ARCH" >&2
   exit 1
 fi
 
-echo "Bundling libhidapi..."
+FRAMEWORKS="$APP/Contents/Frameworks"
+mkdir -p "$FRAMEWORKS"
+
+HIDAPI_SRC="$VENDOR/lib/libhidapi.0.dylib"
+if [[ ! -f "$HIDAPI_SRC" ]]; then
+  echo "error: $HIDAPI_SRC not found" >&2
+  exit 1
+fi
+
+echo "Bundling x86_64 libhidapi..."
 cp "$HIDAPI_SRC" "$FRAMEWORKS/libhidapi.0.dylib"
 chmod 755 "$FRAMEWORKS/libhidapi.0.dylib"
 
-BINARY="$APP/Contents/MacOS/SwiGi"
 install_name_tool -change "@rpath/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
 install_name_tool -change "/opt/homebrew/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
-install_name_tool -change "/opt/homebrew/opt/hidapi/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
+install_name_tool -change "/usr/local/lib/libhidapi.0.dylib" "@executable_path/../Frameworks/libhidapi.0.dylib" "$BINARY" 2>/dev/null || true
 install_name_tool -id "@executable_path/../Frameworks/libhidapi.0.dylib" "$FRAMEWORKS/libhidapi.0.dylib"
 
 mkdir -p "$RELEASES_DIR"
@@ -64,6 +76,6 @@ echo "Creating $ZIP_PATH..."
 ditto -c -k --sequesterRsrc --keepParent "$APP" "$ZIP_PATH"
 
 echo "Done."
-echo "  App:  $APP"
+echo "  App:  $APP ($(lipo -info "$BINARY"))"
 echo "  Zip:  $ZIP_PATH"
 ls -lh "$ZIP_PATH"
