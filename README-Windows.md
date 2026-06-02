@@ -42,13 +42,11 @@ dotnet build SwiGi.Win.sln -c Release
 
 Output: `SwiGi.Win\SwiGi.Win\bin\Release\net8.0-windows10.0.17763.0\SwiGi.exe`
 
-To rebuild the release zip locally:
+Release zip (macOS/Linux with .NET SDK, or Windows):
 
 ```bash
 ./scripts/package-release-windows.sh
 ```
-
-On Windows (PowerShell), after installing the .NET 8 SDK:
 
 ```powershell
 .\scripts\package-release-windows.sh
@@ -86,7 +84,3 @@ SwiGi.Win/
 | `main` | macOS 26+ (Apple Silicon) |
 | `macos-13` | macOS 13+ (Intel) |
 | `windows-11` | Windows 10/11 (x64) |
-
-## SmartScreen / antivirus
-
-Unsigned builds may show Windows SmartScreen on first run. Use **More info → Run anyway**, or build and run locally from source.
