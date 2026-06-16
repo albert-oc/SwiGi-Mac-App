@@ -13,6 +13,8 @@ final class SwiGiEngine: ObservableObject {
     @Published private(set) var status: Status = .stopped
     @Published var verboseLogging = false
 
+    var onLog: (@Sendable (String, OSLogType) -> Void)?
+
     private var workerTask: Task<Void, Never>?
     private let logger = Logger(subsystem: "com.swigi.app", category: "engine")
 
@@ -201,5 +203,6 @@ final class SwiGiEngine: ObservableObject {
     private func log(_ message: String, level: OSLogType) {
         if level == .debug, !verboseLogging { return }
         logger.log(level: level, "\(message, privacy: .public)")
+        onLog?(message, level)
     }
 }
