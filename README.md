@@ -2,19 +2,21 @@
 
 Native macOS menu bar app that synchronizes **Logitech Easy-Switch** across Bluetooth keyboard and mouse. When you press Easy-Switch on the keyboard, SwiGi forwards the same host switch to the mouse so both devices stay paired to the same machine.
 
-This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 26+**.
+This project is a Swift port of the original [`swigi.py`](swigi.py) script, packaged as a background menu bar application for **macOS 13+** (Ventura and later).
 
-> **Other platforms:** branch **`windows-11`** (Windows tray app) · branch **`macos-13`** (Intel Mac, macOS 13+)
+> **Branch `macos-13`:** Intel (x86_64) build for **macOS 13+**. Use **`main`** for Apple Silicon on macOS 26+.
 
 ## macOS compatibility
 
-| Version | Native app (`SwiGi.app`) | Python script (`swigi.py`) |
-|---------|--------------------------|----------------------------|
-| **macOS 26+** | Yes | Yes |
-| macOS 13–25 | See **`macos-13`** branch | Yes |
-| **macOS 12 (Monterey)** | **No** | Yes |
+**macOS 13 (Ventura)** runs on both **Intel** and **Apple Silicon** Macs. This branch ships a native app for **Intel Macs (x86_64)** on macOS 13 and later.
 
-On macOS 12, use the Python script instead:
+| Version | Intel Mac (`x86_64`) | Apple Silicon (`arm64`) | Python script |
+|---------|----------------------|-------------------------|---------------|
+| **macOS 26+** | — | Yes (`main` branch) | Yes |
+| **macOS 13–25** | **Yes** (this branch) | Use `main` if on macOS 26+, or `swigi.py` | Yes |
+| **macOS 12 (Monterey)** | No | No | Yes |
+
+macOS 12 is not supported by the native app. On Monterey, use the Python script:
 
 ```bash
 brew install hidapi python3
@@ -23,11 +25,11 @@ python3 swigi.py
 
 ## Download (pre-built binary)
 
-A ready-to-run build is in [`releases/`](releases/):
+A ready-to-run **Intel** build is in [`releases/`](releases/):
 
 | File | Platform |
 |------|----------|
-| [`SwiGi-1.1.1-macOS26-arm64.zip`](releases/SwiGi-1.1.1-macOS26-arm64.zip) | Apple Silicon (M1/M2/M3/M4), macOS 26+ |
+| [`SwiGi-1.1.1-macOS13-intel.zip`](releases/SwiGi-1.1.1-macOS13-intel.zip) | **Intel Mac (x86_64)**, macOS 13+ |
 
 **Install:**
 
@@ -53,9 +55,22 @@ Then open `SwiGi.app` again. If macOS still blocks it, right-click the app → *
 
 SwiGi runs in the **menu bar only** (no Dock icon). Look for the SwiGi icon at the top-right of the screen, click it, then choose **Start**.
 
+### “Keyboard not found” (Bluetooth is connected)
+
+macOS blocks third-party apps from talking to keyboard HID devices until **Input Monitoring** is granted:
+
+1. Open **System Settings → Privacy & Security → Input Monitoring**.
+2. Enable **SwiGi** (use **+** if it is not listed — select `SwiGi.app` from `/Applications`).
+3. Quit and reopen SwiGi, then click **Start** again.
+
+If you rebuilt or replaced `SwiGi.app`, remove the old entry from Input Monitoring and add the new app.
+
+Turn on **Verbose logging** before **Start** to see which Logitech HID interfaces the app can see.
+
 ## Requirements (build from source)
 
-- macOS 26.0 or later
+- **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
+- macOS 13.0 or later (to run the built app)
 - Xcode 15+
 - Logitech Bluetooth keyboard and mouse with HID++ **CHANGE_HOST** support (same devices supported by the Python script)
 
@@ -90,6 +105,7 @@ SwiGi-Mac-App/
 ├── assets/               # Source app icon (1024×1024)
 ├── releases/             # Pre-built .zip downloads
 ├── scripts/
+│   ├── build-hidapi-static.sh
 │   ├── generate-app-icon.sh
 │   └── package-release.sh
 ├── SwiGi/
