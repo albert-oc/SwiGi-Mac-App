@@ -42,17 +42,40 @@ final class SwiGiEngine: ObservableObject {
         HIDAPIBridge.initialize()
 
         await updateStatus(.starting)
-        log("SwiGi — searching for devices...", level: .info)
 
-        guard var keyboard = DeviceDiscovery.findDevice(wantedType: HIDPPConstants.deviceTypeKeyboard) else {
-            await updateStatus(.error("Keyboard not found. Check Bluetooth connection."))
+        if !HIDPermission.isGranted {
+            _ = HIDPermission.requestInputMonitoring()
+        }
+        if !HIDPermission.isGranted {
+            log("Input Monitoring permission not granted", level: .error)
+            await updateStatus(.error("Input Monitoring permission required. \(HIDPermission.settingsHint)"))
             workerTask = nil
             return
         }
 
-        guard var mouse = DeviceDiscovery.findDevice(wantedType: HIDPPConstants.deviceTypeMouse) else {
+        log("SwiGi — searching for devices...", level: .info)
+
+        guard var keyboard = await findDeviceWithRetry(
+            wantedType: HIDPPConstants.deviceTypeKeyboard,
+            label: "keyboard"
+        ) else {
+            log(DeviceDiscovery.scanSummary(), level: .info)
+            await updateStatus(.error(
+                "Keyboard not found. Confirm it is connected via Bluetooth and supports Easy-Switch. \(HIDPermission.settingsHint)"
+            ))
+            workerTask = nil
+            return
+        }
+
+        guard var mouse = await findDeviceWithRetry(
+            wantedType: HIDPPConstants.deviceTypeMouse,
+            label: "mouse"
+        ) else {
             keyboard.close()
-            await updateStatus(.error("Mouse not found. Check Bluetooth connection."))
+            log(DeviceDiscovery.scanSummary(), level: .info)
+            await updateStatus(.error(
+                "Mouse not found. Confirm it is connected via Bluetooth and supports Easy-Switch. \(HIDPermission.settingsHint)"
+            ))
             workerTask = nil
             return
         }
@@ -198,6 +221,20 @@ final class SwiGiEngine: ObservableObject {
         await MainActor.run {
             status = newStatus
         }
+    }
+
+    private func findDeviceWithRetry(wantedType: UInt8, label: String) async -> DeviceInfo? {
+        for attempt in 1...60 {
+            if Task.isCancelled { return nil }
+            if let device = DeviceDiscovery.findDevice(wantedType: wantedType) {
+                return device
+            }
+            if attempt == 1 || attempt % 10 == 0 {
+                log("Still searching for \(label)... (\(attempt)/60)", level: .info)
+            }
+            try? await Task.sleep(nanoseconds: 500_000_000)
+        }
+        return nil
     }
 
     private func log(_ message: String, level: OSLogType) {

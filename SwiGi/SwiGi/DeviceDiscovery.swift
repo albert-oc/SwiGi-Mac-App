@@ -111,4 +111,31 @@ enum DeviceDiscovery {
 
         return nil
     }
+
+    /// Lists Logitech HID interfaces visible to hidapi (for troubleshooting logs).
+    static func scanSummary() -> String {
+        guard let head = hid_enumerate(HIDPPConstants.logitechVID, 0) else {
+            return "No Logitech HID devices visible to hidapi."
+        }
+        defer { hid_free_enumeration(head) }
+
+        var lines: [String] = []
+        var node: UnsafeMutablePointer<hid_device_info>? = head
+        while let current = node {
+            let info = current.pointee
+            node = info.next
+            let pid = info.product_id
+            if HIDPPConstants.allReceiverPIDs.contains(pid) { continue }
+            let pairKey = HIDPPConstants.usagePairKey(page: info.usage_page, usage: info.usage)
+            let path = String(cString: info.path)
+            let supported = HIDPPConstants.directUsagePairs.contains(pairKey) ? "ok" : "skip"
+            lines.append(
+                "  pid=0x\(String(format: "%04X", pid)) usage=0x\(String(format: "%04X", info.usage_page)):\(String(format: "%04X", info.usage)) [\(supported)] \(path)"
+            )
+        }
+        if lines.isEmpty {
+            return "No Logitech HID devices visible to hidapi (check Bluetooth and Input Monitoring)."
+        }
+        return "Logitech HID scan:\n" + lines.joined(separator: "\n")
+    }
 }

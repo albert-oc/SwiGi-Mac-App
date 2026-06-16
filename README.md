@@ -55,6 +55,18 @@ Then open `SwiGi.app` again. If macOS still blocks it, right-click the app → *
 
 SwiGi runs in the **menu bar only** (no Dock icon). Look for the SwiGi icon at the top-right of the screen, click it, then choose **Start**.
 
+### “Keyboard not found” (Bluetooth is connected)
+
+macOS blocks third-party apps from talking to keyboard HID devices until **Input Monitoring** is granted:
+
+1. Open **System Settings → Privacy & Security → Input Monitoring**.
+2. Enable **SwiGi** (use **+** if it is not listed — select `SwiGi.app` from `/Applications`).
+3. Quit and reopen SwiGi, then click **Start** again.
+
+If you rebuilt or replaced `SwiGi.app`, remove the old entry from Input Monitoring and add the new app.
+
+Turn on **Verbose logging** before **Start** to see which Logitech HID interfaces the app can see.
+
 ## Requirements (build from source)
 
 - **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
