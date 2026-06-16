@@ -39,6 +39,22 @@ A ready-to-run **Intel** build is in [`releases/`](releases/):
 4. Look for the **SwiGi icon in the menu bar** (top-right) — there is no Dock icon.
 5. Click the icon → **Start**.
 
+## Troubleshooting (pre-built binary)
+
+### “Cannot verify” or malware warning
+
+SwiGi is not notarized by Apple. If macOS says it **cannot verify** the developer or warns that the software **may contain malware**, remove the download quarantine in Terminal (adjust the path if you did not install to `/Applications`):
+
+```bash
+xattr -cr /Applications/SwiGi.app
+```
+
+Then open `SwiGi.app` again. If macOS still blocks it, right-click the app → **Open** → **Open**.
+
+### App seems to do nothing when opened
+
+SwiGi runs in the **menu bar only** (no Dock icon). Look for the SwiGi icon at the top-right of the screen, click it, then choose **Start**.
+
 ## Requirements (build from source)
 
 - **Intel Mac** or Apple Silicon Mac with Rosetta (to cross-compile x86_64)
