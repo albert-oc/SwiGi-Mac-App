@@ -5,7 +5,20 @@ import Combine
 final class AppState: ObservableObject {
     let engine = SwiGiEngine()
 
+    @Published var launchAtLogin: Bool
+
     init() {
+        launchAtLogin = AppSettings.launchAtLogin
+        AppSettings.applyStoredPreferences()
+
+        Task { await LogNotifier.shared.requestAuthorization() }
+
+        engine.onLog = { message, level in
+            Task { @MainActor in
+                LogNotifier.shared.notify(message: message, level: level)
+            }
+        }
+
         engine.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }.store(in: &cancellables)
@@ -19,6 +32,11 @@ final class AppState: ObservableObject {
         } else {
             engine.start()
         }
+    }
+
+    func setLaunchAtLogin(_ enabled: Bool) {
+        launchAtLogin = enabled
+        AppSettings.launchAtLogin = enabled
     }
 }
 
@@ -39,6 +57,11 @@ struct MenuBarContentView: View {
                 set: { appState.engine.verboseLogging = $0 }
             ))
                 .disabled(appState.engine.isRunning)
+
+            Toggle("Start at login", isOn: Binding(
+                get: { appState.launchAtLogin },
+                set: { appState.setLaunchAtLogin($0) }
+            ))
 
             Button(appState.engine.isRunning ? "Stop" : "Start") {
                 appState.toggleService()
