@@ -6,17 +6,24 @@ internal sealed class TrayApplicationContext : ApplicationContext
     private readonly SwiGiEngine _engine;
     private readonly ToolStripMenuItem _startStopItem;
     private readonly ToolStripMenuItem _verboseItem;
+    private readonly ToolStripMenuItem _launchAtLoginItem;
     private readonly ToolStripMenuItem _statusItem;
 
     public TrayApplicationContext()
     {
+        AppSettings.ApplyStoredPreferences();
+
         _engine = new SwiGiEngine();
         _engine.StatusChanged += OnStatusChanged;
+        _engine.LogEmitted += OnLogEmitted;
 
         _statusItem = new ToolStripMenuItem("Stopped") { Enabled = false };
         _startStopItem = new ToolStripMenuItem("Start", null, OnStartStop);
         _verboseItem = new ToolStripMenuItem("Verbose logging") { CheckOnClick = true };
         _verboseItem.CheckedChanged += (_, _) => _engine.VerboseLogging = _verboseItem.Checked;
+        _launchAtLoginItem = new ToolStripMenuItem("Start at login") { CheckOnClick = true };
+        _launchAtLoginItem.Checked = AppSettings.LaunchAtLogin;
+        _launchAtLoginItem.CheckedChanged += (_, _) => AppSettings.LaunchAtLogin = _launchAtLoginItem.Checked;
 
         var menu = new ContextMenuStrip();
         menu.Items.Add(new ToolStripMenuItem("SwiGi") { Enabled = false, Font = new Font(SystemFonts.MenuFont, FontStyle.Bold) });
@@ -24,6 +31,7 @@ internal sealed class TrayApplicationContext : ApplicationContext
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(_startStopItem);
         menu.Items.Add(_verboseItem);
+        menu.Items.Add(_launchAtLoginItem);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(new ToolStripMenuItem("Quit", null, OnQuit));
 
@@ -36,6 +44,25 @@ internal sealed class TrayApplicationContext : ApplicationContext
             ContextMenuStrip = menu
         };
         _trayIcon.DoubleClick += (_, _) => OnStartStop(null, EventArgs.Empty);
+    }
+
+    private void OnLogEmitted(string message)
+    {
+        if (_trayIcon.ContextMenuStrip?.InvokeRequired == true)
+        {
+            _trayIcon.ContextMenuStrip.BeginInvoke(() => ShowLogBalloon(message));
+            return;
+        }
+        ShowLogBalloon(message);
+    }
+
+    private void ShowLogBalloon(string message)
+    {
+        var text = message.Length > 255 ? message[..252] + "..." : message;
+        _trayIcon.BalloonTipTitle = "SwiGi";
+        _trayIcon.BalloonTipText = text;
+        _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+        _trayIcon.ShowBalloonTip(3000);
     }
 
     private void OnStatusChanged(EngineStatus status)
@@ -94,6 +121,7 @@ internal sealed class TrayApplicationContext : ApplicationContext
     {
         if (disposing)
         {
+            _engine.LogEmitted -= OnLogEmitted;
             _engine.Dispose();
             _trayIcon.Dispose();
         }

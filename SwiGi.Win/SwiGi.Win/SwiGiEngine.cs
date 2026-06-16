@@ -27,6 +27,7 @@ internal sealed class SwiGiEngine : IDisposable
     private EngineStatus _status = new();
 
     public event Action<EngineStatus>? StatusChanged;
+    public event Action<string>? LogEmitted;
     public bool VerboseLogging { get; set; }
 
     public EngineStatus Status
@@ -77,8 +78,9 @@ internal sealed class SwiGiEngine : IDisposable
 
     private void Log(string message, bool force = false)
     {
-        if (VerboseLogging || force)
-            System.Diagnostics.Debug.WriteLine($"[SwiGi] {message}");
+        if (!VerboseLogging && !force) return;
+        System.Diagnostics.Debug.WriteLine($"[SwiGi] {message}");
+        LogEmitted?.Invoke(message);
     }
 
     private async Task RunLoopAsync(CancellationToken ct)
